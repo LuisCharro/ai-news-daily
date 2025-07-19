@@ -1,12 +1,12 @@
 # Implementation Plan
 
-- [ ] 1. Set up project structure and dependencies
+- [x] 1. Set up project structure and dependencies
   - Initialize Next.js project with TypeScript and Tailwind CSS
   - Install required dependencies (Supabase client, Lucide icons, shadcn/ui components)
   - Configure TypeScript, Tailwind, and PostCSS settings
   - _Requirements: 1.1, 2.1, 6.1, 6.2, 6.3_
 
-- [ ] 2. Create core data models and types
+- [x] 2. Create core data models and types
   - Define TypeScript interfaces for AiNews and API responses
   - Create utility types for database operations
   - Set up type definitions for component props

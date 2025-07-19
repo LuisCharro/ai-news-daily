@@ -1,59 +1,36 @@
-# 🤖 AI News Daily
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-A daily AI news aggregation website that displays the 3 most important artificial intelligence news stories each day. Built with Next.js, featuring a retro terminal interface and automated content generation.
+## Getting Started
 
-![Next.js](https://img.shields.io/badge/Next.js-15.2.4-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.4.17-38B2AC?style=for-the-badge&logo=tailwind-css)
-![Supabase](https://img.shields.io/badge/Supabase-Database-green?style=for-the-badge&logo=supabase)
+First, run the development server:
 
-## 🎯 Features
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- **📰 Daily AI News**: 3 curated AI news stories updated daily
-- **🖥️ Retro Terminal Interface**: Immersive terminal experience with typing effects
-- **📱 Responsive Design**: Optimized for desktop and mobile devices
-- **🤖 Automated Content**: Daily content generation using OpenAI
-- **📊 Supabase Backend**: Reliable data storage and management
-- **🔗 Social Sharing**: Share interesting news on X (Twitter)
-- **🌙 Dark Theme**: Elegant design with terminal aesthetics
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 🚀 Tech Stack
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-### Frontend
-- **Next.js 15.2.4** - React framework with App Router
-- **TypeScript 5.x** - Type-safe JavaScript
-- **Tailwind CSS 3.4.17** - Utility-first CSS framework
-- **Lucide React** - Beautiful SVG icons
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-### Backend & Database
-- **Supabase** - PostgreSQL database and authentication
-- **OpenAI API** - AI-powered content generation
-- **Next.js API Routes** - Server-side endpoints
+## Learn More
 
-### Deployment
-- **Vercel** - Hosting and deployment
-- **GitHub Actions** - Automated daily content generation
+To learn more about Next.js, take a look at the following resources:
 
-## 🏗️ Project Status
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-This project is currently under development. Check the [implementation plan](.kiro/specs/ai-news-website/tasks.md) for detailed progress.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## 📋 Development Plan
+## Deploy on Vercel
 
-The project follows a structured development approach with detailed specifications:
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-- [Requirements](.kiro/specs/ai-news-website/requirements.md) - Feature requirements and acceptance criteria
-- [Design](.kiro/specs/ai-news-website/design.md) - Technical architecture and system design
-- [Tasks](.kiro/specs/ai-news-website/tasks.md) - Step-by-step implementation plan
-
-## 🚀 Getting Started
-
-*Coming soon - setup instructions will be added as development progresses*
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
----
-
-*Inspired by the excellent [code-history-day-web](https://github.com/mouredev/code-history-day-web) project by MoureDev*
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
