@@ -48,15 +48,15 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 export interface RequestConfig {
   method: HttpMethod;
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   params?: Record<string, string | number>;
 }
 
 // API client types
 export interface ApiClient {
-  get<T>(endpoint: string, params?: Record<string, any>): Promise<ApiResponse<T>>;
-  post<T>(endpoint: string, data: any): Promise<ApiResponse<T>>;
-  put<T>(endpoint: string, data: any): Promise<ApiResponse<T>>;
+  get<T>(endpoint: string, params?: Record<string, unknown>): Promise<ApiResponse<T>>;
+  post<T>(endpoint: string, data: unknown): Promise<ApiResponse<T>>;
+  put<T>(endpoint: string, data: unknown): Promise<ApiResponse<T>>;
   delete<T>(endpoint: string): Promise<ApiResponse<T>>;
 }
 
@@ -67,7 +67,7 @@ export interface ValidationError {
   code: string;
 }
 
-export interface ValidationResult {
+export interface ApiValidationResult {
   isValid: boolean;
   errors: ValidationError[];
 }

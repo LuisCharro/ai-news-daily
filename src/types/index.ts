@@ -26,7 +26,7 @@ export interface ApiResponse<T> {
   success: boolean;
 }
 
-export interface NewsApiResponse extends ApiResponse<AiNews[]> {}
+export type NewsApiResponse = ApiResponse<AiNews[]>;
 
 // Database operation types
 export interface CreateNewsItem {
@@ -95,8 +95,8 @@ export interface ShareData {
   url: string;
   hashtags: string[];
 }
-//
- Terminal animation types
+
+// Terminal animation types
 export interface TypewriterEffect {
   text: string;
   speed?: number;

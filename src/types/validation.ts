@@ -7,7 +7,7 @@ export interface ValidationRule<T> {
   minLength?: number;
   maxLength?: number;
   pattern?: RegExp;
-  custom?: (value: any) => boolean | string;
+  custom?: (value: unknown) => boolean | string;
 }
 
 export interface ValidationSchema<T> {
@@ -32,10 +32,10 @@ export const AiNewsValidationSchema: ValidationSchema<AiNews> = {
     { field: 'title', required: true, minLength: 10, maxLength: 200 },
     { field: 'summary', required: true, minLength: 50, maxLength: 1000 },
     { field: 'display_date', required: true, pattern: /^\d{4}-\d{2}-\d{2}$/ },
-    { field: 'position', required: true, custom: (value) => [1, 2, 3].includes(value) },
-    { field: 'day', required: true, custom: (value) => value >= 1 && value <= 31 },
-    { field: 'month', required: true, custom: (value) => value >= 1 && value <= 12 },
-    { field: 'year', required: true, custom: (value) => value >= 2020 && value <= 2030 },
+    { field: 'position', required: true, custom: (value) => typeof value === 'number' && [1, 2, 3].includes(value) },
+    { field: 'day', required: true, custom: (value) => typeof value === 'number' && value >= 1 && value <= 31 },
+    { field: 'month', required: true, custom: (value) => typeof value === 'number' && value >= 1 && value <= 12 },
+    { field: 'year', required: true, custom: (value) => typeof value === 'number' && value >= 2020 && value <= 2030 },
   ],
 };
 
@@ -44,10 +44,10 @@ export const CreateNewsValidationSchema: ValidationSchema<CreateNewsItem> = {
     { field: 'title', required: true, minLength: 10, maxLength: 200 },
     { field: 'summary', required: true, minLength: 50, maxLength: 1000 },
     { field: 'display_date', required: true, pattern: /^\d{4}-\d{2}-\d{2}$/ },
-    { field: 'position', required: true, custom: (value) => [1, 2, 3].includes(value) },
-    { field: 'day', required: true, custom: (value) => value >= 1 && value <= 31 },
-    { field: 'month', required: true, custom: (value) => value >= 1 && value <= 12 },
-    { field: 'year', required: true, custom: (value) => value >= 2020 && value <= 2030 },
+    { field: 'position', required: true, custom: (value) => typeof value === 'number' && [1, 2, 3].includes(value) },
+    { field: 'day', required: true, custom: (value) => typeof value === 'number' && value >= 1 && value <= 31 },
+    { field: 'month', required: true, custom: (value) => typeof value === 'number' && value >= 1 && value <= 12 },
+    { field: 'year', required: true, custom: (value) => typeof value === 'number' && value >= 2020 && value <= 2030 },
   ],
 };
 
@@ -63,34 +63,49 @@ export enum ValidationErrorCode {
 }
 
 // Type guards
-export function isAiNews(obj: any): obj is AiNews {
+export function isAiNews(obj: unknown): obj is AiNews {
   return (
     typeof obj === 'object' &&
     obj !== null &&
-    typeof obj.id === 'number' &&
-    typeof obj.title === 'string' &&
-    typeof obj.summary === 'string' &&
-    typeof obj.display_date === 'string' &&
-    typeof obj.position === 'number' &&
-    typeof obj.day === 'number' &&
-    typeof obj.month === 'number' &&
-    typeof obj.year === 'number' &&
-    [1, 2, 3].includes(obj.position)
+    'id' in obj &&
+    'title' in obj &&
+    'summary' in obj &&
+    'display_date' in obj &&
+    'position' in obj &&
+    'day' in obj &&
+    'month' in obj &&
+    'year' in obj &&
+    typeof (obj as Record<string, unknown>).id === 'number' &&
+    typeof (obj as Record<string, unknown>).title === 'string' &&
+    typeof (obj as Record<string, unknown>).summary === 'string' &&
+    typeof (obj as Record<string, unknown>).display_date === 'string' &&
+    typeof (obj as Record<string, unknown>).position === 'number' &&
+    typeof (obj as Record<string, unknown>).day === 'number' &&
+    typeof (obj as Record<string, unknown>).month === 'number' &&
+    typeof (obj as Record<string, unknown>).year === 'number' &&
+    [1, 2, 3].includes((obj as Record<string, unknown>).position as number)
   );
 }
 
-export function isCreateNewsItem(obj: any): obj is CreateNewsItem {
+export function isCreateNewsItem(obj: unknown): obj is CreateNewsItem {
   return (
     typeof obj === 'object' &&
     obj !== null &&
-    typeof obj.title === 'string' &&
-    typeof obj.summary === 'string' &&
-    typeof obj.display_date === 'string' &&
-    typeof obj.position === 'number' &&
-    typeof obj.day === 'number' &&
-    typeof obj.month === 'number' &&
-    typeof obj.year === 'number' &&
-    [1, 2, 3].includes(obj.position)
+    'title' in obj &&
+    'summary' in obj &&
+    'display_date' in obj &&
+    'position' in obj &&
+    'day' in obj &&
+    'month' in obj &&
+    'year' in obj &&
+    typeof (obj as Record<string, unknown>).title === 'string' &&
+    typeof (obj as Record<string, unknown>).summary === 'string' &&
+    typeof (obj as Record<string, unknown>).display_date === 'string' &&
+    typeof (obj as Record<string, unknown>).position === 'number' &&
+    typeof (obj as Record<string, unknown>).day === 'number' &&
+    typeof (obj as Record<string, unknown>).month === 'number' &&
+    typeof (obj as Record<string, unknown>).year === 'number' &&
+    [1, 2, 3].includes((obj as Record<string, unknown>).position as number)
   );
 }
 
