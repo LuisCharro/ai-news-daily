@@ -22,5 +22,12 @@ jobs:
           node-version: '20'
       - name: Install dependencies
         run: npm ci
+      - name: Build TypeScript
+        run: npx tsc src/scripts/generate-daily-ai-news.ts --outDir dist/scripts
+
       - name: Run daily AI news generator
-        run: npx ts-node --loader ts-node/esm src/scripts/generate-daily-ai-news.ts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: node dist/scripts/generate-daily-ai-news.js
