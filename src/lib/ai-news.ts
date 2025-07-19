@@ -21,7 +21,7 @@ export async function fetchAiNews(date?: string): Promise<AiNews[]> {
   return data.data || [];
 }
 
-export function validateAiNews(news: any): news is AiNews {
+export function validateAiNews(news: unknown): news is AiNews {
   return isAiNews(news);
 }
 
