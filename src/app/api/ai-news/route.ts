@@ -11,7 +11,7 @@ export async function GET() {
   const today = new Date();
   const display_date = today.toISOString().slice(0, 10);
   // Query for today's news, fallback to all news if none
-  let { data, error } = await supabase
+  const { data, error } = await supabase
     .from('ai_news')
     .select('*')
     .eq('display_date', display_date)
