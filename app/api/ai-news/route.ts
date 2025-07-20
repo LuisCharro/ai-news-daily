@@ -17,7 +17,10 @@ export async function GET() {
     .eq('display_date', display_date)
     .order('position', { ascending: true });
 
+  console.log('API: Query for today', { display_date, data, error });
+
   if (error) {
+    console.error('API: Error querying today', error);
     return NextResponse.json({ success: false, error: error.message, data: [] }, { status: 500 });
   }
   // If no news for today, get latest
@@ -27,7 +30,9 @@ export async function GET() {
       .select('*')
       .order('created_at', { ascending: false })
       .limit(3);
+    console.log('API: Fallback to latest', { latest, latestError });
     if (latestError) {
+      console.error('API: Error querying latest', latestError);
       return NextResponse.json({ success: false, error: latestError.message, data: [] }, { status: 500 });
     }
     return NextResponse.json({ success: true, data: latest });

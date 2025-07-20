@@ -39,7 +39,7 @@ Format as a JSON object with title, summary, and source fields.`;
   try {
     const parsed = JSON.parse(jsonString);
     news = Array.isArray(parsed) ? parsed : [parsed];
-  } catch (err) {
+  } catch {
     console.error('OpenAI response:', content);
     throw new Error('Failed to parse OpenAI response as JSON');
   }
@@ -82,7 +82,6 @@ async function main() {
   console.log('Done.');
 }
 
-main().catch(err => {
-  console.error('Error:', err);
-  process.exit(1);
+main().catch(() => {
+  console.error('Error occurred in main');
 });

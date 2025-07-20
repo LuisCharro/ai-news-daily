@@ -1,30 +1,13 @@
-import { AiNews, ApiResponse, isAiNews } from '@/types';
-
-export async function fetchAiNews(date?: string): Promise<AiNews[]> {
+export async function fetchAiNews(date?: string): Promise<unknown[]> {
   const url = new URL('/api/ai-news', window.location.origin);
   if (date) {
     url.searchParams.set('date', date);
   }
 
   const response = await fetch(url.toString());
-  
   if (!response.ok) {
     throw new Error(`Failed to fetch AI news: ${response.statusText}`);
   }
-
-  const data: ApiResponse<AiNews[]> = await response.json();
-  
-  if (!data.success) {
-    throw new Error(data.error || 'Failed to fetch AI news');
-  }
-
+  const data = await response.json();
   return data.data || [];
-}
-
-export function validateAiNews(news: unknown): news is AiNews {
-  return isAiNews(news);
-}
-
-export function sortNewsByPosition(news: AiNews[]): AiNews[] {
-  return [...news].sort((a, b) => a.position - b.position);
 }
