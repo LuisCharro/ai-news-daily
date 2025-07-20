@@ -11,12 +11,13 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
 
 async function generateNews(date: string) {
-  const prompt = `Generate 1 important AI news story for ${date}. The story should be:
+  const prompt = `Generate 3 important AI news stories for ${date}. Each story should be:
   - Relevant to artificial intelligence, machine learning, or AI industry
   - Realistic and educational
   - 2-3 sentences long
   - Include a compelling title
-Format as a JSON object with title, summary, and source fields.`;
+  - Include a source URL if possible
+Format as a JSON array of objects with title, summary, and source fields.`;
 
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
@@ -52,25 +53,42 @@ async function saveNews(date: string, news: Array<{ title: string; summary: stri
   const month = d.getMonth() + 1;
   const year = d.getFullYear();
 
-  for (let i = 0; i < news.length; i++) {
-    const item = news[i];
-    const { title, summary, source } = item;
-    const position = 1; // Always 1 for single news
-    const { error } = await supabase.from('ai_news').upsert({
-      day,
-      month,
-      year,
-      title,
-      summary,
-      source,
-      display_date: date,
-      position,
-    }, { onConflict: 'display_date,position' });
-    if (error) {
-      console.error(`Error saving news:`, error.message);
-    } else {
-      console.log(`Saved news: ${title}`);
-    }
+  // First, get the current maximum position for this date
+  const { data: existingNews, error: fetchError } = await supabase
+    .from('ai_news')
+    .select('*')
+    .eq('display_date', date)
+    .order('position', { ascending: false })
+    .limit(1);
+
+  if (fetchError) {
+    console.error('Error fetching existing news:', fetchError.message);
+    return;
+  }
+
+  // Calculate the starting position (either after the last item or 1 if no items exist)
+  const startPosition = existingNews && existingNews.length > 0 ? existingNews[0].position + 1 : 1;
+
+  // Then insert all new news items with unique positions
+  const newsToInsert = news.map((item, index) => ({
+    day,
+    month,
+    year,
+    title: item.title,
+    summary: item.summary,
+    source: item.source,
+    display_date: date,
+    position: startPosition + index, // Assign unique position to each news item
+  }));
+
+  const { error } = await supabase
+    .from('ai_news')
+    .insert(newsToInsert);
+
+  if (error) {
+    console.error('Error saving news:', error.message);
+  } else {
+    console.log(`Saved ${newsToInsert.length} news items for ${date}`);
   }
 }
 
