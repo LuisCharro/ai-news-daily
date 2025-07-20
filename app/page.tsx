@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from 'next/dynamic';
+import LoadingSpinner from "@/components/loading-spinner";
 import { useEffect, useState } from 'react';
 import { getLatestNews } from '@/lib/ai-news';
 
@@ -21,8 +22,6 @@ export default function Home() {
       });
   }, []);
 
-  // Import LoadingSpinner
-  const LoadingSpinner = require("@/components/loading-spinner").default;
   return (
     <div className="terminal-container w-full max-w-4xl mx-auto p-6 sm:p-12 rounded-xl shadow-lg border border-cyan-500/20 bg-slate-950/90 backdrop-blur-md mt-8">
       <h1 className="typewriter text-4xl font-mono font-bold text-cyan-400 mb-8 text-center">AI News Daily</h1>

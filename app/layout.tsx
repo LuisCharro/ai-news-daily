@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -29,10 +31,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Import header and footer
-  // ...existing code...
-  const Header = require("@/components/header").default;
-  const Footer = require("@/components/footer").default;
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-cyan-200 min-h-screen flex flex-col`}>
