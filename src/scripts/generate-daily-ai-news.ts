@@ -1,17 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import * as dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
 import path from 'path';
 
 // Load environment variables from .env.local if it exists
 try {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  const envPath = path.resolve(__dirname, '../../../.env.local');
+  const envPath = path.resolve(process.cwd(), '.env.local');
   dotenv.config({ path: envPath });
+  console.log('Loaded environment variables from .env.local');
 } catch (error) {
-  console.log('No .env.local file found, using environment variables from GitHub Actions');
+  console.log('No .env.local file found, using environment variables from the environment');
 }
 
 // Get environment variables with validation
