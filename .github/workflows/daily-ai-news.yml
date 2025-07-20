@@ -13,21 +13,43 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      NODE_ENV: production
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          
       - name: Install dependencies
         run: npm ci
-      - name: Build TypeScript
-        run: npx tsc
-
+        
+      - name: Build TypeScript scripts
+        run: npm run build:scripts
+        
+      - name: Verify build output
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Build output in dist/scripts/:"
+          ls -la dist/scripts/
+          
       - name: Run daily AI news generator
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: node dist/scripts/generate-daily-ai-news.js
+          NODE_PATH: ${{ github.workspace }}/node_modules
+        working-directory: ${{ github.workspace }}
+        run: |
+          echo "Running from: $(pwd)"
+          node dist/scripts/generate-daily-ai-news.js
+        
+      - name: Check for errors
+        if: failure()
+        run: |
+          echo "Workflow failed. Check the logs above for errors."
+          exit 1

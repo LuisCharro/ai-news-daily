@@ -1,11 +1,32 @@
 import { createClient } from '@supabase/supabase-js';
 import OpenAI from 'openai';
 import * as dotenv from 'dotenv';
-dotenv.config({ path: '.env.local' });
+import { fileURLToPath } from 'url';
+import path from 'path';
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY!;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY!;
+// Load environment variables from .env.local if it exists
+try {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const envPath = path.resolve(__dirname, '../../../.env.local');
+  dotenv.config({ path: envPath });
+} catch (error) {
+  console.log('No .env.local file found, using environment variables from GitHub Actions');
+}
+
+// Get environment variables with validation
+function getEnvVar(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    console.error(`❌ Error: Missing required environment variable: ${name}`);
+    process.exit(1);
+  }
+  return value;
+}
+
+const SUPABASE_URL = getEnvVar('SUPABASE_URL');
+const SUPABASE_SERVICE_KEY = getEnvVar('SUPABASE_SERVICE_KEY');
+const OPENAI_API_KEY = getEnvVar('OPENAI_API_KEY');
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 const openai = new OpenAI({ apiKey: OPENAI_API_KEY });
@@ -100,6 +121,17 @@ async function main() {
   console.log('Done.');
 }
 
-main().catch(() => {
-  console.error('Error occurred in main');
-});
+// Main execution
+async function run() {
+  try {
+    console.log('🚀 Starting AI news generation...');
+    await main();
+    console.log('✅ Successfully completed AI news generation');
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error in AI news generation:', error instanceof Error ? error.message : error);
+    process.exit(1);
+  }
+}
+
+run();
