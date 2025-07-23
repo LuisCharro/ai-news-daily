@@ -36,7 +36,15 @@ async function generateNews(date: string) {
   - 2-3 sentences long
   - Include a compelling title
   - Include a source URL if possible
-Format as a JSON array of objects with title, summary, and source fields.`;
+
+Return ONLY a valid JSON array with no additional text or explanations. Format as:
+[
+  {
+    "title": "Story title",
+    "summary": "Story summary",
+    "source": "https://example.com"
+  }
+]`;
 
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
@@ -48,19 +56,31 @@ Format as a JSON array of objects with title, summary, and source fields.`;
   const content = response.choices[0].message?.content;
   if (!content) throw new Error('No content from OpenAI');
 
-  // Remove triple backticks and any markdown formatting
-  const jsonString = content
-    .replace(/^```json\s*/i, '')
-    .replace(/^```\s*/i, '')
-    .replace(/```\s*$/i, '')
-    .trim();
+  // Extract JSON from markdown code blocks and remove any trailing text
+  let jsonString = content;
+  
+  // Check if content contains markdown code blocks
+  const jsonBlockMatch = content.match(/```json\s*([\s\S]*?)\s*```/i) || content.match(/```\s*([\s\S]*?)\s*```/i);
+  if (jsonBlockMatch) {
+    jsonString = jsonBlockMatch[1];
+  }
+  
+  // Remove any text after the JSON array ends
+  const jsonArrayMatch = jsonString.match(/(\[[\s\S]*?\])/);
+  if (jsonArrayMatch) {
+    jsonString = jsonArrayMatch[1];
+  }
+  
+  jsonString = jsonString.trim();
 
   let news: Array<{ title: string; summary: string; source?: string }> = [];
   try {
     const parsed = JSON.parse(jsonString);
     news = Array.isArray(parsed) ? parsed : [parsed];
-  } catch {
+  } catch (parseError) {
     console.error('OpenAI response:', content);
+    console.error('Extracted JSON string:', jsonString);
+    console.error('Parse error:', parseError);
     throw new Error('Failed to parse OpenAI response as JSON');
   }
   return news;
