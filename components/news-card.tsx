@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Bot, ExternalLink, Sparkles } from "lucide-react"
+import ShareButton from "./share-button"
 
 interface NewsItem {
   id: number
@@ -39,12 +40,21 @@ export default function NewsCard({ news }: NewsCardProps) {
 
             <p className="text-gray-300 text-lg leading-relaxed">{news.summary}</p>
 
-            {news.source && (
-              <div className="flex items-center space-x-2 pt-4">
-                <ExternalLink className="w-4 h-4 text-cyan-400" />
-                <span className="text-cyan-400 text-sm font-medium">Source: {news.source}</span>
+            <div className="flex items-center justify-between pt-4">
+              <div className="flex items-center space-x-2">
+                {news.source && (
+                  <>
+                    <ExternalLink className="w-4 h-4 text-cyan-400" />
+                    <span className="text-cyan-400 text-sm font-medium">Source: {news.source}</span>
+                  </>
+                )}
               </div>
-            )}
+              <ShareButton 
+                title={news.title}
+                summary={news.summary}
+                date={news.display_date}
+              />
+            </div>
           </div>
         </div>
       </CardContent>
